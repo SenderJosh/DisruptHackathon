@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Sexy</title>
+    <title>Disrupt</title>
 	
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -29,10 +29,59 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+	
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<script>
+	function hi()
+	{
+		var xmlhttp = new XMLHttpRequest(); 
+		
+		var dataString = []; 
+				
+		xmlhttp.open("GET", "generateChartData.php", false);
 
+		
+		xmlhttp.onreadystatechange = function() 
+		{ //Call a function when the state changes.
+			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) // complete and no errors
+			{ 
+				var response = JSON.parse(xmlhttp.responseText); 
+				for (i = 0; i < response.length; i++)
+				{
+					dataString[i] = [];  
+					for (j = 0; j < response[i].length; j++)
+					{
+						dataString[i].push(response[i][j]); 
+					}
+					//dataString.push(response[i].join()); 
+				}
+				//alert(dataString); 
+			}
+			
+				TESTER = document.getElementById('tester');
+
+			var data = [
+			  {
+				z: dataString,
+				x: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+				y: ['12 AM', '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM', '9 PM', '10 PM', '11 PM'],
+				type: 'heatmap'
+			  }
+			];
+
+			Plotly.newPlot(TESTER, data);
+			
+		}
+		
+		xmlhttp.send(); 
+
+
+
+	}
+</script>
 </head>
 
-<body onload="sendToPHP();">
+<body onload="sendToPHP();hi();">
 
 
         <!-- Navigation -->
@@ -45,7 +94,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">Sexy</a>
+                <a class="navbar-brand" href="index.php">Disrupt</a>
             </div>
             <!-- /.navbar-collapse -->
         </nav>
@@ -284,6 +333,15 @@
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+				<div class="alert alert-info">
+					<strong>Availability Map</strong> by week
+				</div>
+				<div class="row">
+					<div id="tester" style="width:100%;height:1000px;"></div>
+
+					<div id="calendar" style="height: 900px;">
 					</div>
 				</div>
 			</div>
